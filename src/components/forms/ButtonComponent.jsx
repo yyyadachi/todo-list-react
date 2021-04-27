@@ -1,11 +1,10 @@
 import React, { useContext } from "react";
+// TodoStateContextをインポート
+import { TodoStateContext } from "../../App";
 
 // material-ui関連のインポート
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-
-// AppからTodosContextをインポート
-import { TodosContext } from "../../App";
 
 // material-uiの設定
 const useStyles = makeStyles((theme) => ({
@@ -16,7 +15,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ButtonComponent = (props) => {
   const classes = useStyles();
-  const { todosDispatch } = useContext(TodosContext);
+  const { todoDispatch } = useContext(TodoStateContext);
   return (
     <div>
       {/* buttonのpropsは指定しなければdefault値となる。iconは非表示となる。 */}
@@ -26,7 +25,13 @@ const ButtonComponent = (props) => {
         color={props.color}
         startIcon={props.icon}
         size={props.size}
-        onClick={() => todosDispatch(props.action)}
+        onClick={
+          props.action
+            ? () => {
+                todoDispatch(props.action);
+              }
+            : props.handleClick
+        }
       >
         {props.title}
       </Button>

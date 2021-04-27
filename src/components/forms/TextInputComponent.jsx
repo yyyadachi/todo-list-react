@@ -3,7 +3,7 @@ import TextField from "@material-ui/core/TextField";
 
 const TextInputComponent = (props) => {
   return (
-    <React.Fragment>
+    <>
       <TextField
         id="textInput"
         label={props.label}
@@ -12,7 +12,7 @@ const TextInputComponent = (props) => {
         value={props.value}
         onChange={(e) => props.setValue(e.target.value)}
       />
-    </React.Fragment>
+    </>
   );
 };
 

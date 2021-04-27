@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
+// TodoTmpContextをインポート
+import { TodoTmpContext } from "../App";
 
 // material-ui関連のインポート
 import { makeStyles } from "@material-ui/core/styles";
@@ -17,7 +19,7 @@ import DescriptionIcon from "@material-ui/icons/Description";
 const useStyles = makeStyles((theme) => ({
   grid: {
     flexGrow: 1,
-    padding: theme.spacing(2),
+    padding: theme.spacing(1),
     direction: "row",
     justify: "flex-start",
     alignItems: "center",
@@ -27,10 +29,8 @@ const useStyles = makeStyles((theme) => ({
 const TodoInput = () => {
   const classes = useStyles();
 
-  // 入力データをuseStateに設定
-  const [summary, setSummary] = useState("");
-  const [deadline, setDeadline] = useState(null);
-  const [importance, setImportance] = useState("");
+  // TodoTmpContextの値を変数に代入
+  const todoTmpValue = useContext(TodoTmpContext);
 
   // 重要度selectボックスの値
   const selectElements = [
@@ -42,54 +42,55 @@ const TodoInput = () => {
   ];
 
   return (
-    <React.Fragment>
+    <div style={{ marginTop: "10px" }}>
       <Grid container className={classes.grid}>
-        <Grid item xs={12} md={10}>
+        <Grid item xs={12}>
           <TextInputComponent
             label={"Todoを入力"}
             isFullWidth={true}
-            value={summary}
-            setValue={setSummary}
-          />
-          <p>{summary}</p>
-        </Grid>
-        <Grid item xs={12} md={2} style={{ textAlign: "right" }} zeroMinWidth>
-          <ButtonComponent
-            title={"詳細(未)"}
-            icon={<DescriptionIcon />}
-            action={"openModal"}
-            isNew={true}
+            value={todoTmpValue.todoText}
+            setValue={todoTmpValue.setTodoText}
           />
         </Grid>
-        <Grid item xs={6} sm={4}>
+        <Grid item xs={6} md={3}>
           <DatePickerComponent
-            //interval={3} //入力日から完了期日までの日数
+            interval={3} //入力日から完了期日までの日数
             label={"完了期日"}
-            selectedDate={deadline}
-            setSelectedDate={setDeadline}
+            selectedDate={todoTmpValue.deadline}
+            setSelectedDate={todoTmpValue.setDeadline}
           />
         </Grid>
-        <Grid item xs={6} sm={4}>
+        <Grid item xs={6} md={3}>
           <SelectComponent
             label={"重要度"}
             elements={selectElements}
             initialValue={3}
             helperText={"重要度：高5→低1"}
-            selectValue={importance}
-            setSelectValue={setImportance}
+            selectValue={todoTmpValue.importance}
+            setSelectValue={todoTmpValue.setImportance}
           />
         </Grid>
-        <Grid item xs={12} sm={4} style={{ textAlign: "right" }}>
+        <Grid item>
           <ButtonComponent
             title="ToDo追加"
             color="primary"
             icon={<PlaylistAddIcon />}
-            size="large"
+            // size="large"
             action={"addTodo"}
           />
         </Grid>
+        <Grid item>
+          <ButtonComponent
+            title={"詳細入力"}
+            icon={<DescriptionIcon />}
+            handleClick={() => {
+              alert("Open Modal");
+            }} // stateを変更しないボタンは関数を渡す
+            isNew={true}
+          />
+        </Grid>
       </Grid>
-    </React.Fragment>
+    </div>
   );
 };
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { RadioComponent, TodoList } from "./index";
+import Grid from "@material-ui/core/Grid";
 
-//TODO Gridを適用する
 const TodoLists = () => {
   const radioElements = [
     { label: "未完了", color: "secondary" },
@@ -14,15 +14,17 @@ const TodoLists = () => {
     { label: "更新日順" },
   ];
   return (
-    <div>
-      <RadioComponent
-        title={"ソート"}
-        elements={radioElementsTwo}
-        style={{ marginRight: "8px" }} //効果なし
-      />
-      <RadioComponent title={"表示切替"} elements={radioElements} />
+    <>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6}>
+          <RadioComponent title={"ソート"} elements={radioElementsTwo} />
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <RadioComponent title={"表示切替"} elements={radioElements} />
+        </Grid>
+      </Grid>
       <TodoList />
-    </div>
+    </>
   );
 };
 

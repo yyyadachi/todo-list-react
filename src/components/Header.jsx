@@ -27,7 +27,7 @@ HideOnScroll.propTypes = {
   window: PropTypes.func,
 };
 
-//スイッチボタンを右に配置（タイトルの長さを最長にする）///////////////////////
+//スイッチボタンを右に配置///////////////////////
 const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,

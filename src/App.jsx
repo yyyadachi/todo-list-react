@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from "react";
+import React, { useState, createContext, useReducer } from "react";
 
 // material-ui関連のインポート
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -15,7 +15,6 @@ import Divider from "@material-ui/core/Divider";
 import { Header, TodoInput, TodoLists } from "./components/index";
 
 // todoデータ（JSON）のインポート
-//TODO ローカルストレージを使ってみる。Firebaseに移行。
 import TodoData from "./TodoData.json";
 
 // material-uiの設定
@@ -32,9 +31,10 @@ const useStyles = makeStyles({
   },
 });
 
-//TODO custom Hookにしたい
-// todoデータをuseContextで管理
-export const TodosContext = createContext();
+// todo保存データをuseContextで管理
+export const TodoStateContext = createContext();
+// todo入力データをuseContextで管理
+export const TodoTmpContext = createContext();
 
 // useReducerのinitialStateとReducerを定義
 const initialState = TodoData;
@@ -47,15 +47,16 @@ const reducer = (state, action) => {
       const id = Math.max(...state.map((todo) => todo.id)) + 1;
 
       return alert(id);
-    case "openModal":
-      //TODO 処理を記述 モーダルを開く
-      return alert("openModal");
+
     case "editedTodo":
       //TODO 処理を記述 Todoの編集確定
       return alert("editedTodo");
     case "doneTodo":
       //TODO 処理を記述 Todoを完了
       return alert("doneTodo");
+    case "restoreTodo":
+      //TODO 処理を記述 Todoを未完了に戻す
+      return alert("restoreTodo");
     case "deleteTodo":
       //TODO 処理を記述 Todoを削除
       return alert("deleteTodo");
@@ -65,26 +66,51 @@ const reducer = (state, action) => {
 };
 
 const App = () => {
+  // material-uiのstyle読み込み
   const classes = useStyles();
-  const [todosState, dispatch] = useReducer(reducer, initialState);
+
+  // 入力データをuseStateに設定 TodoTmpContextにまとめる
+  const [todoText, setTodoText] = useState("");
+  const [todoDetail, setTodoDetail] = useState("");
+  const [deadline, setDeadline] = useState(null);
+  const [importance, setImportance] = useState("");
+  const [progress, setProgress] = useState("");
+
+  // Todo保存データの変更をreducer関数にまとめる
+  const [todoState, dispatch] = useReducer(reducer, initialState);
   return (
     <React.Fragment>
       <CssBaseline />
       <ThemeProvider theme={theme}>
-        <TodosContext.Provider
+        <TodoStateContext.Provider
           value={{
-            todosState: todosState,
-            todosDispatch: dispatch,
+            todoState,
+            todoDispatch: dispatch,
           }}
         >
-          <Header />
-          <Container maxWidth="md">
-            <TodoInput />
-            <Divider variant="middle" className={classes.divider} />
-            <h2>ToDo一覧</h2>
-            <TodoLists />
-          </Container>
-        </TodosContext.Provider>
+          <TodoTmpContext.Provider
+            value={{
+              todoText,
+              setTodoText,
+              todoDetail,
+              setTodoDetail,
+              deadline,
+              setDeadline,
+              importance,
+              setImportance,
+              progress,
+              setProgress,
+            }}
+          >
+            <Header />
+            <Container maxWidth="md">
+              <TodoInput />
+              <Divider variant="middle" className={classes.divider} />
+              <h2>ToDo一覧</h2>
+              <TodoLists />
+            </Container>
+          </TodoTmpContext.Provider>
+        </TodoStateContext.Provider>
       </ThemeProvider>
     </React.Fragment>
   );
