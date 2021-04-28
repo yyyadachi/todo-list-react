@@ -55,7 +55,7 @@ index.js
 - progress 進捗（未着手、進行中、待期、完了）  
 - registrationDate 登録日
 - updateDate 更新日（初期値は登録日）
-- completionDate 完了日
+- completeDate 完了日
 
 ## 備考
 - Material-ui利用
@@ -66,5 +66,5 @@ index.js
 ## 将来的に検討
 - ダークモードの設定
 - データをローカルストレージに保存。
-- Firebaseを利用。
+- Firebaseを利用。(promise、axios利用？)
 - 検索を追加

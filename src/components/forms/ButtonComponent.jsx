@@ -18,13 +18,14 @@ const ButtonComponent = (props) => {
   const { todoDispatch } = useContext(TodoStateContext);
   return (
     <div>
-      {/* buttonのpropsは指定しなければdefault値となる。iconは非表示となる。 */}
+      {/* 指定しないpropsはdefault値となる。iconは非表示となる。 */}
       <Button
         className={classes.button}
         variant="contained"
         color={props.color}
         startIcon={props.icon}
         size={props.size}
+        style={{ display: props.display }}
         onClick={
           props.action
             ? () => {

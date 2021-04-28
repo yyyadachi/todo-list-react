@@ -45,8 +45,20 @@ const reducer = (state, action) => {
       //TODO 処理を記述 TODOを追加する
       // idの最大値を求め+1する
       const id = Math.max(...state.map((todo) => todo.id)) + 1;
-
-      return alert(id);
+      return [
+        ...state,
+        {
+          id,
+          // todoText,
+          // todoDetail,
+          // deadline,
+          // importance,
+          progress: "未着手",
+          registrationDate: new Date(),
+          updateDate: new Date(),
+          completeDate: null,
+        },
+      ];
 
     case "editedTodo":
       //TODO 処理を記述 Todoの編集確定
@@ -78,6 +90,7 @@ const App = () => {
 
   // Todo保存データの変更をreducer関数にまとめる
   const [todoState, dispatch] = useReducer(reducer, initialState);
+
   return (
     <React.Fragment>
       <CssBaseline />
