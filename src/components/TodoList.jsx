@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { ButtonComponent } from "./entryIndex";
 // Contextをインポート
-import { TodoTmpContext, GlobalContext } from "../App";
+import { TodoTmpContext, TodoSavedContext, GlobalContext } from "../App";
 // 独自関数をインポート
 import { lookUp } from "./definedFunction";
 
@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme) => ({
 const TodoList = (props) => {
   const classes = useStyles();
   const { todoTmpDispatch } = useContext(TodoTmpContext);
+  const { todoSavedDispatch } = useContext(TodoSavedContext);
   const globalContextValue = useContext(GlobalContext);
 
   let secondaryText = [];
@@ -90,13 +91,18 @@ const TodoList = (props) => {
 
                 <Grid item>
                   <ButtonComponent
-                    title="完了"
                     color="primary"
+                    display={props.filterValue === "complete" ? "none" : ""}
                     icon={<PlaylistAddCheckIcon />}
                     size="small"
-                    action={"doneTodo"}
-                    payload={todo.id}
-                    display={props.filterValue === "complete" ? "none" : ""}
+                    title="完了"
+                    //
+                    handleClick={() => {
+                      todoSavedDispatch({
+                        type: "doneTodo",
+                        payload: todo.id,
+                      });
+                    }}
                   />
                 </Grid>
 
@@ -107,6 +113,7 @@ const TodoList = (props) => {
                     icon={<EditIcon />}
                     size="small"
                     title="編集"
+                    //
                     handleClick={() => {
                       todoTmpDispatch({
                         type: "edit",
@@ -118,26 +125,36 @@ const TodoList = (props) => {
 
                 <Grid item>
                   <ButtonComponent
-                    title="削除"
                     color="secondary"
+                    display={props.filterValue === "complete" ? "none" : ""}
                     icon={<DeleteIcon />}
                     size="small"
-                    action={"deleteTodo"}
-                    payload={todo.id}
-                    display={props.filterValue === "complete" ? "none" : ""}
+                    title="削除"
+                    //
+                    handleClick={() => {
+                      todoSavedDispatch({
+                        type: "deleteTodo",
+                        payload: todo.id,
+                      });
+                    }}
                   />
                 </Grid>
 
                 {/* 表示区分が未完了の場合のみ表示 */}
                 <Grid item>
                   <ButtonComponent
-                    title="進行中に戻す"
                     color="secondary"
+                    display={props.filterValue === "complete" ? "" : "none"}
                     icon={<RestoreIcon />}
                     size="small"
-                    action={"restoreTodo"}
-                    payload={todo.id}
-                    display={props.filterValue === "complete" ? "" : "none"}
+                    title="進行中に戻す"
+                    //
+                    handleClick={() => {
+                      todoSavedDispatch({
+                        type: "restoreTodo",
+                        payload: todo.id,
+                      });
+                    }}
                   />
                 </Grid>
               </Grid>

@@ -58,7 +58,8 @@ const todoSavedReducer = (todoSavedState, todoSavedAction) => {
       //  tmpIdの有無で新規追加か更新かを分岐
       if (todoSavedAction.payload.tmpId === null) {
         // 新規idは最大値+1
-        const newId = Math.max([...todoSavedState].map((todo) => todo.id)) + 1;
+        const newId = Math.max(...todoSavedState.map((todo) => todo.id)) + 1;
+        console.log("newId:" + newId);
         newTodoSavedState = [
           ...todoSavedState,
           {
@@ -111,7 +112,7 @@ const todoSavedReducer = (todoSavedState, todoSavedAction) => {
         new Date(),
         "yyyy-MM-dd"
       );
-      // console.log(newTodoSavedState);
+      console.log(JSON.stringify(newTodoSavedState));
       return newTodoSavedState;
 
     case "restoreTodo":
