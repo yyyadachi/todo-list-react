@@ -1,5 +1,9 @@
-import React from "react";
-import { ButtonComponent } from "./index";
+import React, { useContext } from "react";
+import { ButtonComponent } from "./entryIndex";
+// Contextをインポート
+import { TodoTmpContext, GlobalContext } from "../App";
+// 独自関数をインポート
+import { lookUp } from "./definedFunction";
 
 // material-ui関連のインポート
 import { makeStyles } from "@material-ui/core/styles";
@@ -20,16 +24,22 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// ////////////////////////////////////////////////////
+// FUNCTION ///////////////////////////////////////////
 const TodoList = (props) => {
   const classes = useStyles();
-  // TodoStateContext.todoStateの値を変数に分割代入
-  // const { todoState } = useContext(TodoStateContext);
+  const { todoTmpDispatch } = useContext(TodoTmpContext);
+  const globalContextValue = useContext(GlobalContext);
 
+  let secondaryText = [];
+
+  // ////////////////////////////////////////////////////
+  // RETURN /////////////////////////////////////////////
   return (
     <div className={classes.demo}>
       <List dense={true}>
+        {/* **** ここからmap **** */}
         {props.todoListForDisplay.map((todo, index) => {
-          // console.log("render");
           return (
             <ListItem key={index.toString()}>
               <Grid container spacing={0}>
@@ -39,17 +49,41 @@ const TodoList = (props) => {
                   </ListItemIcon>
                 </Grid>
                 <Grid item xs={11} md={7}>
+                  <div style={{ display: "none" }}>
+                    {/* secondaryTextの見通しを良くするために配列を作成 */}
+                    {
+                      (secondaryText = [
+                        todo.todoDetail !== "" ? `${todo.todoDetail}\n` : "",
+                        `(`,
+                        `完了期日：${todo.deadline}`,
+                        `重要度：${lookUp(
+                          globalContextValue.selectImportanceElements,
+                          "index",
+                          todo.importanceIndex,
+                          "text"
+                        )}`,
+                        `進捗：${lookUp(
+                          globalContextValue.selectProgressElements,
+                          "index",
+                          todo.progressIndex,
+                          "text"
+                        )}`,
+                        `ID：${todo.id}`,
+                        `\n`,
+                        props.filterValue === "complete"
+                          ? `完了日：${todo.completeDate}`
+                          : "",
+                        props.filterValue !== "complete"
+                          ? `更新日：${todo.updateDate}`
+                          : "",
+                        `作成日：${todo.createdDate}`,
+                        `)`,
+                      ])
+                    }
+                  </div>
                   <ListItemText
                     primary={todo.todoText}
-                    secondary={`${
-                      todo.todoDetail ? todo.todoDetail + "\n" : ""
-                    }（${
-                      props.filterValue === "complete"
-                        ? "完了日：" + todo.completeDate + "　"
-                        : ""
-                    }完了期日：${todo.deadline}　重要度：${
-                      todo.importance
-                    }　進捗：${todo.progress}　ID：${todo.id}）`}
+                    secondary={secondaryText.join("　")}
                     style={{ whiteSpace: "pre-line" }} // 改行を有効にする
                   />
                 </Grid>
@@ -61,22 +95,27 @@ const TodoList = (props) => {
                     icon={<PlaylistAddCheckIcon />}
                     size="small"
                     action={"doneTodo"}
+                    payload={todo.id}
                     display={props.filterValue === "complete" ? "none" : ""}
                   />
                 </Grid>
+
                 <Grid item>
                   <ButtonComponent
-                    title="編集"
                     color="default"
+                    display={props.filterValue === "complete" ? "none" : ""}
                     icon={<EditIcon />}
                     size="small"
+                    title="編集"
                     handleClick={() => {
-                      alert("Open Modal");
-                    }} // stateを変更しないボタンは関数を渡す
-                    isNew={false}
-                    display={props.filterValue === "complete" ? "none" : ""}
+                      todoTmpDispatch({
+                        type: "edit",
+                        payload: todo,
+                      });
+                    }}
                   />
                 </Grid>
+
                 <Grid item>
                   <ButtonComponent
                     title="削除"
@@ -84,17 +123,20 @@ const TodoList = (props) => {
                     icon={<DeleteIcon />}
                     size="small"
                     action={"deleteTodo"}
+                    payload={todo.id}
                     display={props.filterValue === "complete" ? "none" : ""}
                   />
                 </Grid>
+
                 {/* 表示区分が未完了の場合のみ表示 */}
                 <Grid item>
                   <ButtonComponent
-                    title="未完了に戻す"
+                    title="進行中に戻す"
                     color="secondary"
                     icon={<RestoreIcon />}
                     size="small"
                     action={"restoreTodo"}
+                    payload={todo.id}
                     display={props.filterValue === "complete" ? "" : "none"}
                   />
                 </Grid>
@@ -102,6 +144,7 @@ const TodoList = (props) => {
             </ListItem>
           );
         })}
+        {/* **** ここまでmap **** */}
       </List>
     </div>
   );

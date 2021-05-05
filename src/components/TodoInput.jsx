@@ -1,20 +1,24 @@
 import React, { useContext } from "react";
-// TodoTmpContextをインポート
-import { TodoTmpContext } from "../App";
+// contextをインポート
+import { TodoSavedContext, TodoTmpContext, GlobalContext } from "../App";
+// コンポーネントをインポート
+import {
+  ButtonComponent,
+  DatePickerComponent,
+  TextFieldComponent,
+  SelectComponent,
+} from "./entryIndex";
 
 // material-ui関連のインポート
 import { makeStyles } from "@material-ui/core/styles";
 import Grid from "@material-ui/core/Grid";
-import {
-  TextInputComponent,
-  ButtonComponent,
-  DatePickerComponent,
-  SelectComponent,
-} from "./index";
 // buttonコンポーネントに渡すアイコンをインポート
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import DescriptionIcon from "@material-ui/icons/Description";
+// date-fnsをインポート
+import { format } from "date-fns";
 
+// ////////////////////////////////////////////////////
 // material-uiの設定
 const useStyles = makeStyles((theme) => ({
   grid: {
@@ -26,70 +30,113 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// ////////////////////////////////////////////////////
+// FUNCTION ///////////////////////////////////////////
 const TodoInput = () => {
   const classes = useStyles();
 
-  // TodoTmpContextの値を変数に代入
-  const todoTmpValue = useContext(TodoTmpContext);
+  // Contextの値を取得
+  const { todoSavedDispatch } = useContext(TodoSavedContext); // 59行目変更後削除
+  const { todoTmpState, todoTmpDispatch } = useContext(TodoTmpContext);
+  const { selectImportanceElements } = useContext(GlobalContext);
+  // const todoModalContextValue = useContext(TodoModalContext);
 
-  // 重要度selectボックスの値
-  const selectElements = [
-    { value: 1, text: "1(低)" },
-    { value: 2, text: "2" },
-    { value: 3, text: "3" },
-    { value: 4, text: "4" },
-    { value: 5, text: "5(高)" },
-  ];
-
+  // ////////////////////////////////////////////////////
+  // RETURN /////////////////////////////////////////////
   return (
     <div style={{ marginTop: "10px" }}>
       <Grid container className={classes.grid}>
         <Grid item xs={12}>
-          <TextInputComponent
+          <TextFieldComponent
+            autoFocus={true}
+            fullWidth={true}
             label={"Todoを入力"}
-            isFullWidth={true}
-            value={todoTmpValue.todoText}
-            setValue={todoTmpValue.setTodoText}
+            multiline={true}
+            variant={"outlined"}
+            // Enterで追加を行う
+            handleEnterPress={(e) => {
+              if (e.key === "Enter") {
+                todoSavedDispatch({
+                  type: "addTodo",
+                  payload: todoTmpState,
+                });
+              }
+            }}
+            //
+            value={todoTmpState.tmpTodoText}
+            setValue={(e) => {
+              todoTmpDispatch({
+                type: "handleChange",
+                payload: { key: "tmpTodoText", value: e.target.value },
+              });
+              // console.log(JSON.stringify(todoTmpState));
+            }}
           />
         </Grid>
         <Grid item xs={6} md={3}>
           <DatePickerComponent
-            interval={3} //入力日から完了期日までの日数
             label={"完了期日"}
-            selectedDate={todoTmpValue.deadline}
-            setSelectedDate={todoTmpValue.setDeadline}
+            //
+            selectedDate={todoTmpState.tmpDeadline}
+            setSelectedDate={(date) => {
+              todoTmpDispatch({
+                type: "handleChange",
+                payload: {
+                  key: "tmpDeadline",
+                  value: format(date, "yyyy-MM-dd"),
+                },
+              });
+            }}
           />
         </Grid>
         <Grid item xs={6} md={3}>
           <SelectComponent
-            label={"重要度"}
-            elements={selectElements}
-            initialValue={3}
+            elements={selectImportanceElements}
             helperText={"重要度：高5→低1"}
-            selectValue={todoTmpValue.importance}
-            setSelectValue={todoTmpValue.setImportance}
+            label={"重要度"}
+            //
+            selectValue={todoTmpState.tmpImportanceIndex}
+            setSelectValue={(e) => {
+              todoTmpDispatch({
+                type: "handleChange",
+                payload: { key: "tmpImportanceIndex", value: e.target.value },
+              });
+              // console.log(JSON.stringify(todoTmpState));
+            }}
           />
         </Grid>
         <Grid item>
           <ButtonComponent
-            title="ToDo追加"
             color="primary"
             icon={<PlaylistAddIcon />}
-            // size="large"
-            action={"addTodo"}
+            title="ToDo追加"
+            //
+            handleClick={async () => {
+              todoSavedDispatch({
+                type: "addUpdate",
+                payload: todoTmpState,
+              });
+              await todoTmpDispatch({
+                type: "reset",
+              });
+            }}
           />
         </Grid>
         <Grid item>
           <ButtonComponent
-            title={"詳細入力"}
             icon={<DescriptionIcon />}
+            title={"詳細入力"}
+            //
             handleClick={() => {
-              alert("Open Modal");
-            }} // stateを変更しないボタンは関数を渡す
-            isNew={true}
+              todoTmpDispatch({
+                type: "new",
+                // payload: todoTmpState,
+              });
+            }}
           />
         </Grid>
       </Grid>
+      {console.log("render TodoInput.jsx")}
     </div>
   );
 };

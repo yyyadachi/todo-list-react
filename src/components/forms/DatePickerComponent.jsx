@@ -1,40 +1,47 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // material-ui、日付ピッカー関連のインポート
 import "date-fns";
-import DateFnsUtils from "@date-io/date-fns";
+import DateFnsUtils from "@date-io/date-fns"; // v1.3.13
+// import { format } from "date-fns"; // 追加
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 
+// ////////////////////////////////////////////////////
+// FUNCTION ///////////////////////////////////////////
 const DatePickerComponent = (props) => {
-  // 初期値を代入（日付を設定）
-  const today = new Date();
-  useEffect(() => {
-    props.setSelectedDate(
-      props.interval ? today.setDate(today.getDate() + props.interval) : null
-    );
-  }, []);
+  // const handleDateChange = (date) => {
+  //   if (props.isEdit === true) {
+  //     props.setSelectedDate({
+  //       ...props.editDetailTodo,
+  //       deadline: format(date, "yyyy-MM-dd"),
+  //     });
+  //   } else {
+  //     props.setSelectedDate(format(date, "yyyy-MM-dd"));
+  //   }
+  // };
 
-  const handleDateChange = (date) => {
-    props.setSelectedDate(date);
-  };
-
+  // ////////////////////////////////////////////////////
+  // RETURN /////////////////////////////////////////////
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       <KeyboardDatePicker
+        autoOk={true} // 日付を選択したらポップアップを消去
+        disabled={props.disabled}
         disableToolbar
-        variant="inline"
         format="yyyy/MM/dd"
-        margin="normal"
         id="datePicker"
-        label={props.label}
-        value={props.selectedDate}
-        onChange={handleDateChange}
         KeyboardButtonProps={{
           "aria-label": "change date",
         }}
+        label={props.label}
+        margin="normal"
+        variant="inline"
+        //
+        value={props.selectedDate}
+        onChange={props.setSelectedDate}
       />
     </MuiPickersUtilsProvider>
   );

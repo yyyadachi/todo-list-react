@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 // material-ui関連のインポート
 import { makeStyles } from "@material-ui/core/styles";
@@ -19,18 +19,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// ////////////////////////////////////////////////////
+// FUNCTION ///////////////////////////////////////////
 const SelectComponent = (props) => {
   const classes = useStyles();
 
-  // 初期値を代入
-  useEffect(() => {
-    props.setSelectValue(props.initialValue);
-  }, []);
-
-  const handleChange = (event) => {
-    props.setSelectValue(event.target.value);
-  };
-
+  // ////////////////////////////////////////////////////
+  // RETURN /////////////////////////////////////////////
   return (
     <div>
       <FormControl className={classes.formControl}>
@@ -38,16 +33,19 @@ const SelectComponent = (props) => {
         <Select
           labelId="select-label"
           id="select-helper"
+          //
           value={props.selectValue}
-          onChange={handleChange}
+          onChange={props.setSelectValue}
         >
+          {/* **** ここからmap **** */}
           {props.elements.map((element, index) => {
             return (
-              <MenuItem value={element.value} key={index.toString()}>
+              <MenuItem value={element.index} key={index.toString()}>
                 {element.text}
               </MenuItem>
             );
           })}
+          {/* **** ここまでmap **** */}
         </Select>
         <FormHelperText>{props.helperText}</FormHelperText>
       </FormControl>
