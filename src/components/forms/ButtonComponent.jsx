@@ -1,7 +1,4 @@
-import React, { useContext } from "react";
-// Contextをインポート
-import { TodoSavedContext } from "../../App";
-import { TodoTmpContext } from "../../App";
+import React from "react";
 
 // material-ui関連のインポート
 import { makeStyles } from "@material-ui/core/styles";
@@ -16,7 +13,7 @@ const useStyles = makeStyles((theme) => ({
 
 const ButtonComponent = (props) => {
   const classes = useStyles();
-  const { todoSavedDispatch } = useContext(TodoSavedContext);
+
   return (
     <div>
       {/* 指定しないpropsはdefault値となる。iconは非表示となる。 */}
@@ -27,17 +24,7 @@ const ButtonComponent = (props) => {
         startIcon={props.icon}
         style={{ display: props.display }}
         variant="contained"
-        // variant={props.variant}
         onClick={props.handleClick}
-        //   props.action
-        //     ? () => {
-        //         todoSavedDispatch({
-        //           type: props.action,
-        //           payload: props.payload,
-        //         });
-        //       }
-        //     : () => props.handleClick(props.id) // 関数を実行せず引数を渡す
-        // }
       >
         {props.title}
       </Button>

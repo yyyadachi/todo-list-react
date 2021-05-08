@@ -1,16 +1,23 @@
-import React, { useState } from "react";
-import PropTypes from "prop-types";
+import React, { useContext } from "react";
+import { TodoSavedContext } from "../App";
+
+// material-ui関連のインポート
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import useScrollTrigger from "@material-ui/core/useScrollTrigger";
 import Slide from "@material-ui/core/Slide";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch from "@material-ui/core/Switch";
 import { makeStyles } from "@material-ui/core/styles";
 import ListAltIcon from "@material-ui/icons/ListAlt";
+import IconButton from "@material-ui/core/IconButton";
+import Brightness7Icon from "@material-ui/icons/Brightness7";
+import Brightness4Icon from "@material-ui/icons/Brightness4";
+import SettingsIcon from "@material-ui/icons/Settings";
+import Tooltip from "@material-ui/core/Tooltip";
+import Menu from "@material-ui/core/Menu";
+import MenuItem from "@material-ui/core/MenuItem";
 
-//ヘッダーをスライドで隠すための設定///////////////////////
+//ヘッダーをスライドで隠す
 function HideOnScroll(props) {
   const { children, window } = props;
   const trigger = useScrollTrigger({ target: window ? window() : undefined });
@@ -22,11 +29,6 @@ function HideOnScroll(props) {
   );
 }
 
-HideOnScroll.propTypes = {
-  children: PropTypes.element.isRequired,
-  window: PropTypes.func,
-};
-
 //スイッチボタンを右に配置///////////////////////
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -34,21 +36,52 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-/////////////////export Header///////////////////////
+// ////////////////////////////////////////////////////
+// FUNCTION ///////////////////////////////////////////
 const Header = (props) => {
-  //スイッチボタンの設定
-  const [check, setCheck] = useState(false);
-
-  const handleChange = (event) => {
-    setCheck(event.target.checked);
-    //TODO check更新でダークモード適用・未適用を変更する処理を追加（Appにダークモードに変更する関数を書いてpropsで渡す→useEffectで発火）
-  };
-
   const classes = useStyles();
 
-  /////////////////return///////////////////////
+  // const { todoSavedDispatch } = useContext(TodoSavedContext);
+  const { todoSavedDispatch } = useContext(TodoSavedContext);
+
+  // ダークモードのOnOff
+  const handleDarkModeOn = () => {
+    localStorage.setItem("darkMode", "on");
+    props.setDarkMode(true);
+  };
+  const handleDarkModeOff = () => {
+    localStorage.setItem("darkMode", "off");
+    props.setDarkMode(false);
+  };
+
+  // 設定メニューボタンの設定
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const handleSetting = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleGet = () => {
+    todoSavedDispatch({ type: "getDefault" });
+    setAnchorEl(null);
+  };
+  const handleClear = () => {
+    todoSavedDispatch({ type: "clear" });
+    setAnchorEl(null);
+  };
+  const handleLocalDelete = () => {
+    handleDarkModeOff();
+    todoSavedDispatch({ type: "localDelete" });
+    setAnchorEl(null);
+
+    // localStorage.clear();
+  };
+
+  // ////////////////////////////////////////////////////
+  // RETURN /////////////////////////////////////////////
   return (
-    <React.Fragment>
+    <>
       <HideOnScroll {...props}>
         <AppBar>
           <Toolbar>
@@ -56,15 +89,55 @@ const Header = (props) => {
             <Typography variant="h6" className={classes.title}>
               TodoList
             </Typography>
-            <FormControlLabel
-              control={<Switch checked={check} onChange={handleChange} />}
-              label="Dark Mode(未)"
-            />
+            {props.darkMode ? (
+              <Tooltip title="ライトモードへ">
+                <IconButton color="inherit" onClick={handleDarkModeOff}>
+                  <Brightness7Icon size="large" />
+                </IconButton>
+              </Tooltip>
+            ) : (
+              <Tooltip title="ダークモードへ">
+                <IconButton color="inherit" onClick={handleDarkModeOn}>
+                  <Brightness4Icon />
+                </IconButton>
+              </Tooltip>
+            )}
+            <Tooltip title="設定">
+              <IconButton color="inherit" onClick={handleSetting}>
+                <SettingsIcon />
+              </IconButton>
+            </Tooltip>
+            <Menu
+              id="simple-menu"
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+              // anchorOrigin={{
+              //   horizontal: "right",
+              // }}
+              transformOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+            >
+              <MenuItem disabled={true}>
+                (注)現在のデータは全削除されます
+              </MenuItem>
+              <MenuItem onClick={handleGet}>
+                デフォルトデータを取り込む
+              </MenuItem>
+              <MenuItem onClick={handleClear}>全データ削除</MenuItem>
+              <MenuItem onClick={handleLocalDelete}>
+                ローカルストレージをクリア
+              </MenuItem>
+            </Menu>
           </Toolbar>
         </AppBar>
       </HideOnScroll>
       <Toolbar /> {/* これが無いと次のコンテンツが下にもぐる */}
-    </React.Fragment>
+      {console.log("レンダー： header.jsx")}
+    </>
   );
 };
 

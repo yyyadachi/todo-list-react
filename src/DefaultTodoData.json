@@ -1,0 +1,145 @@
+[
+  {
+    "id": 1,
+    "todoText": "完了日が一番新しいデータ（default:完了)",
+    "todoDetail": "テスト上未来日を設定",
+    "deadline": "2021-08-01",
+    "importanceIndex": 2,
+    "progressIndex": 4,
+    "createdDate": "2021-04-23",
+    "updateDate": "2021-06-25",
+    "completeDate": "2022-12-31"
+  },
+  {
+    "id": 2,
+    "todoText": "完了期日が一番新しいデータ",
+    "todoDetail": "",
+    "deadline": "2022-12-01",
+    "importanceIndex": 4,
+    "progressIndex": 2,
+    "createdDate": "2021-04-23",
+    "updateDate": "2021-06-25",
+    "completeDate": ""
+  },
+  {
+    "id": 3,
+    "todoText": "ここは本文データ（todoText）",
+    "todoDetail": "ここは詳細データ（todoDetail）",
+    "deadline": "2021-03-13",
+    "importanceIndex": 2,
+    "progressIndex": 3,
+    "createdDate": "2021-03-13",
+    "updateDate": "2021-03-13",
+    "completeDate": ""
+  },
+  {
+    "id": 4,
+    "todoText": "本文が長いデータ（default:完了)。あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよわをん あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよわをん 検索テスト",
+    "todoDetail": "ここは本文が長いデータの詳細",
+    "deadline": "2021-04-01",
+    "importanceIndex": 4,
+    "progressIndex": 4,
+    "createdDate": "2021-03-31",
+    "updateDate": "2021-04-02",
+    "completeDate": "2021-04-02"
+  },
+  {
+    "id": 5,
+    "todoText": "本文が改行しているデータ\n改行後のデータ 検索テスト",
+    "todoDetail": "本文が改行しているデータの詳細",
+    "deadline": "2021-05-09",
+    "importanceIndex": 2,
+    "progressIndex": 1,
+    "createdDate": "2021-05-08",
+    "updateDate": "2021-05-10",
+    "completeDate": ""
+  },
+  {
+    "id": 6,
+    "todoText": "詳細が長いデータの本文",
+    "todoDetail": "詳細が長い。 ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ ABCDEFGHIJKLMNOPQRSTUVWXYZ 検索テスト",
+    "deadline": "2021-05-10",
+    "importanceIndex": 3,
+    "progressIndex": 3,
+    "createdDate": "2021-05-09",
+    "updateDate": "2021-05-31",
+    "completeDate": ""
+  },
+  {
+    "id": 7,
+    "todoText": "詳細が改行しているデータの本文（default:完了)",
+    "todoDetail": "詳細が改行している\n改行後の詳細１\n完了の内期日が一番新しい 検索テスト",
+    "deadline": "2022-05-11",
+    "importanceIndex": 1,
+    "progressIndex": 4,
+    "createdDate": "2021-04-30",
+    "updateDate": "2021-04-30",
+    "completeDate": "2021-04-30"
+  },
+  {
+    "id": 8,
+    "todoText": "詳細がないデータ（default:完了)",
+    "todoDetail": "",
+    "deadline": "2021-05-12",
+    "importanceIndex": 3,
+    "progressIndex": 4,
+    "createdDate": "2021-04-10",
+    "updateDate": "2021-04-10",
+    "completeDate": "2021-05-12"
+  },
+  {
+    "id": 9,
+    "todoText": "重要度が一番高いデータ",
+    "todoDetail": "importanceIndex:5 表示:５（高）",
+    "deadline": "2021-06-30",
+    "importanceIndex": 5,
+    "progressIndex": 3,
+    "createdDate": "2021-03-01",
+    "updateDate": "2021-03-15",
+    "completeDate": ""
+  },
+  {
+    "id": 10,
+    "todoText": "更新日が一番新しいデータ",
+    "todoDetail": "テスト上未来日を設定",
+    "deadline": "2021-07-01",
+    "importanceIndex": 3,
+    "progressIndex": 2,
+    "createdDate": "2021-04-23",
+    "updateDate": "2022-06-25",
+    "completeDate": ""
+  },
+  {
+    "id": 11,
+    "todoText": "デフォルトデータの利用IDは1,2,3,4,5,6,7,8,9,10,11,12,20（13~19は無し）",
+    "todoDetail": "新規TodoはID:21から附番される",
+    "deadline": "2021-02-12",
+    "importanceIndex": 3,
+    "progressIndex": 2,
+    "createdDate": "2021-02-01",
+    "updateDate": "2021-05-10",
+    "completeDate": ""
+  },
+  {
+    "id": 12,
+    "todoText": "これはTodoアプリの動作確認用デフォルトデータです 検索の確認は「検索テスト」で検索！",
+    "todoDetail": "利用後、右上アイコンボタンよりlocalStorageをクリアできます。",
+    "deadline": "2021-01-11",
+    "importanceIndex": 1,
+    "progressIndex": 1,
+    "createdDate": "2021-01-01",
+    "updateDate": "2021-01-31",
+    "completeDate": ""
+  },
+  {
+    "id": 20,
+    "todoText": "デフォルトで一番ＩＤが大きいデータ",
+    "todoDetail": "IDは20",
+    "deadline": "2021-09-01",
+    "importanceIndex": 1,
+    "progressIndex": 1,
+    "createdDate": "2021-04-23",
+    "updateDate": "2021-06-25",
+    "completeDate": ""
+  }
+]

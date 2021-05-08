@@ -22,10 +22,7 @@ import { format } from "date-fns";
 // material-uiの設定
 const useStyles = makeStyles((theme) => ({
   grid: {
-    flexGrow: 1,
-    padding: theme.spacing(1),
-    direction: "row",
-    justify: "flex-start",
+    padding: theme.spacing(2),
     alignItems: "center",
   },
 }));
@@ -36,10 +33,9 @@ const TodoInput = () => {
   const classes = useStyles();
 
   // Contextの値を取得
-  const { todoSavedDispatch } = useContext(TodoSavedContext); // 59行目変更後削除
+  const { todoSavedDispatch } = useContext(TodoSavedContext);
   const { todoTmpState, todoTmpDispatch } = useContext(TodoTmpContext);
   const { selectImportanceElements } = useContext(GlobalContext);
-  // const todoModalContextValue = useContext(TodoModalContext);
 
   // ////////////////////////////////////////////////////
   // RETURN /////////////////////////////////////////////
@@ -73,7 +69,7 @@ const TodoInput = () => {
             }}
           />
         </Grid>
-        <Grid item xs={6} md={3}>
+        <Grid item xs={6} sm>
           <DatePickerComponent
             label={"完了期日"}
             //
@@ -89,7 +85,7 @@ const TodoInput = () => {
             }}
           />
         </Grid>
-        <Grid item xs={6} md={3}>
+        <Grid item xs={6} sm>
           <SelectComponent
             elements={selectImportanceElements}
             helperText={"重要度：高5→低1"}
@@ -105,35 +101,39 @@ const TodoInput = () => {
             }}
           />
         </Grid>
-        <Grid item>
-          <ButtonComponent
-            color="primary"
-            icon={<PlaylistAddIcon />}
-            title="ToDo追加"
-            //
-            handleClick={async () => {
-              todoSavedDispatch({
-                type: "addUpdate",
-                payload: todoTmpState,
-              });
-              await todoTmpDispatch({
-                type: "reset",
-              });
-            }}
-          />
-        </Grid>
-        <Grid item>
-          <ButtonComponent
-            icon={<DescriptionIcon />}
-            title={"詳細入力"}
-            //
-            handleClick={() => {
-              todoTmpDispatch({
-                type: "new",
-                // payload: todoTmpState,
-              });
-            }}
-          />
+        <Grid item xs={12} sm={6}>
+          <Grid container justify="flex-end">
+            <Grid item>
+              <ButtonComponent
+                color="primary"
+                icon={<PlaylistAddIcon />}
+                title="ToDo追加"
+                //
+                handleClick={async () => {
+                  todoSavedDispatch({
+                    type: "addUpdate",
+                    payload: todoTmpState,
+                  });
+                  await todoTmpDispatch({
+                    type: "reset",
+                  });
+                }}
+              />
+            </Grid>
+            <Grid item>
+              <ButtonComponent
+                icon={<DescriptionIcon />}
+                title={"詳細入力"}
+                //
+                handleClick={() => {
+                  todoTmpDispatch({
+                    type: "new",
+                    // payload: todoTmpState,
+                  });
+                }}
+              />
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
       {console.log("render TodoInput.jsx")}
