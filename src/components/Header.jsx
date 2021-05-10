@@ -2,22 +2,24 @@ import React, { useContext } from "react";
 import { TodoSavedContext } from "../App";
 
 // material-ui関連のインポート
-import AppBar from "@material-ui/core/AppBar";
-import Toolbar from "@material-ui/core/Toolbar";
-import Typography from "@material-ui/core/Typography";
-import useScrollTrigger from "@material-ui/core/useScrollTrigger";
-import Slide from "@material-ui/core/Slide";
-import { makeStyles } from "@material-ui/core/styles";
-import ListAltIcon from "@material-ui/icons/ListAlt";
-import IconButton from "@material-ui/core/IconButton";
-import Brightness7Icon from "@material-ui/icons/Brightness7";
+import {
+  AppBar,
+  IconButton,
+  makeStyles,
+  Menu,
+  MenuItem,
+  Slide,
+  Toolbar,
+  Tooltip,
+  Typography,
+  useScrollTrigger,
+} from "@material-ui/core";
 import Brightness4Icon from "@material-ui/icons/Brightness4";
+import Brightness7Icon from "@material-ui/icons/Brightness7";
+import ListAltIcon from "@material-ui/icons/ListAlt";
 import SettingsIcon from "@material-ui/icons/Settings";
-import Tooltip from "@material-ui/core/Tooltip";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
 
-//ヘッダーをスライドで隠す
+//ヘッダーをスライドさせる
 function HideOnScroll(props) {
   const { children, window } = props;
   const trigger = useScrollTrigger({ target: window ? window() : undefined });
@@ -41,7 +43,6 @@ const useStyles = makeStyles((theme) => ({
 const Header = (props) => {
   const classes = useStyles();
 
-  // const { todoSavedDispatch } = useContext(TodoSavedContext);
   const { todoSavedDispatch } = useContext(TodoSavedContext);
 
   // ダークモードのOnOff
@@ -54,32 +55,41 @@ const Header = (props) => {
     props.setDarkMode(false);
   };
 
-  // 設定メニューボタンの設定
+  // アイコンボタン（設定）のメニュー
   const [anchorEl, setAnchorEl] = React.useState(null);
+  // 設定のメニューを開く
   const handleSetting = (event) => {
+    console.log("handleSetting");
     setAnchorEl(event.currentTarget);
   };
+  // 設定のメニューを閉じる
   const handleClose = () => {
+    console.log("handleClose");
     setAnchorEl(null);
   };
+  // デフォルトデータの取り込み
   const handleGet = () => {
+    console.log("handleGet");
     todoSavedDispatch({ type: "getDefault" });
     setAnchorEl(null);
   };
+  // 全データ削除
   const handleClear = () => {
+    console.log("handleClear");
     todoSavedDispatch({ type: "clear" });
     setAnchorEl(null);
   };
-  const handleLocalDelete = () => {
+  // ローカルストレージクリア
+  const handleLocalClear = () => {
+    console.log("handleLocalClear");
     handleDarkModeOff();
-    todoSavedDispatch({ type: "localDelete" });
+    todoSavedDispatch({ type: "localClear" });
     setAnchorEl(null);
-
-    // localStorage.clear();
   };
 
   // ////////////////////////////////////////////////////
   // RETURN /////////////////////////////////////////////
+  console.log("レンダー（header.jsx）");
   return (
     <>
       <HideOnScroll {...props}>
@@ -113,9 +123,6 @@ const Header = (props) => {
               keepMounted
               open={Boolean(anchorEl)}
               onClose={handleClose}
-              // anchorOrigin={{
-              //   horizontal: "right",
-              // }}
               transformOrigin={{
                 vertical: "bottom",
                 horizontal: "right",
@@ -128,7 +135,7 @@ const Header = (props) => {
                 デフォルトデータを取り込む
               </MenuItem>
               <MenuItem onClick={handleClear}>全データ削除</MenuItem>
-              <MenuItem onClick={handleLocalDelete}>
+              <MenuItem onClick={handleLocalClear}>
                 ローカルストレージをクリア
               </MenuItem>
             </Menu>
@@ -136,7 +143,6 @@ const Header = (props) => {
         </AppBar>
       </HideOnScroll>
       <Toolbar /> {/* これが無いと次のコンテンツが下にもぐる */}
-      {console.log("レンダー： header.jsx")}
     </>
   );
 };

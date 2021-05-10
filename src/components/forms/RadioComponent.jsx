@@ -1,17 +1,24 @@
 import React from "react";
 
 // material-ui関連のインポート
-import Radio from "@material-ui/core/Radio";
-import RadioGroup from "@material-ui/core/RadioGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormControl from "@material-ui/core/FormControl";
-import FormLabel from "@material-ui/core/FormLabel";
+import {
+  Radio,
+  RadioGroup,
+  FormControlLabel,
+  FormControl,
+  FormLabel,
+} from "@material-ui/core";
 
+// ////////////////////////////////////////////////////
+// FUNCTION ///////////////////////////////////////////
 const RadioComponent = (props) => {
   const handleChange = (e) => {
     props.setRadioValue(e.target.value);
   };
 
+  // ////////////////////////////////////////////////////
+  // RETURN /////////////////////////////////////////////
+  console.log("レンダー（RadioComponent.jsx）");
   return (
     <FormControl component="fieldset">
       <FormLabel component="legend">{props.title}</FormLabel>

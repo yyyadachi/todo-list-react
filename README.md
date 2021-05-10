@@ -1,13 +1,13 @@
 # ToDo アプリ（ReactHooks）
 
 github URL https://github.com/yyyadachi/todo-list-react  
-host URL 未作成
+host URL https://yyyadachi.github.io/todo-list-react/
 
 ## 概要
 
 - ToDo データを入力、編集、削除できる。
 - 表示画面にて完了・未完了の選択、また各種ソートができる。
-- 詳細入力および編集はモーダルで行う。(未実装)
+- 詳細入力および編集はモーダルで行う。
 
 ## ディレクトリ構成
 
@@ -19,21 +19,22 @@ src/
 ￤ │ │ ┣ RadioComponent.jsx // ラジオボタン（表示区分、ソート選択）  
 ￤ │ │ ┣ SelectComponent.jsx // セレクトボックス（重要度、進捗）  
 ￤ │ │ ┗ TextInputComponent.jsx // 入力フォーム （todo、詳細）  
+￤ │ ┣ definedFunction.js // 独自関数  
+￤ │ ┣ entryIndex.js // エントリーポイント  
 ￤ │ ┣ Header.jsx // ヘッダー  
-￤ │ ┣ index.js // エントリーポイント  
 ￤ │ ┣ TodoInput.jsx // 新規入力部分のラッパー  
 ￤ │ ┣ TodoLists.jsx // Todo データ表示部分のラッパー  
 ￤ │ ┣ TodoList.jsx // Todo データ本体表示  
 ￤ │ ┗ TodoModal.jsx // 新規 Todo の詳細入力および既存 Todo の編集  
 ￤ ┣ App.jsx  
-￤ ┣ index.js  
-￤ ┗ TodoData.json //ToDo 本体データ（JSON 形式）
+￤ ┣ DefaultTodoData.josn // テスト用のデフォルト Todo データ  
+￤ ┗ index.js
 
 ## UI 構成
 
 index.js  
 ￤ ┗ App.jsx  
-￤ ￤ ┣ Header.jsx // ダークモード（**未実装**）切替用スイッチボタン内包  
+￤ ￤ ┣ Header.jsx // ダークモード切替、設定（スライド時、上に Fadeout）  
 ￤ ￤ ┣ TodoInput.jsx  
 ￤ ￤ │ ┣ TextInputComponent.jsx // Todo テキスト入力  
 ￤ ￤ │ ┣ ButtonComponent.jsx // 詳細編集ボタン（モーダルを開く）  
@@ -84,20 +85,21 @@ index.js
 
 ## 主な State・変数・定数 構成
 
-| 名前                                | 内容                                                          | 設定ファイル | context          | 備考                                                                                                                                        | 利用ファイル |
-| :---------------------------------- | :------------------------------------------------------------ | :----------- | :--------------- | :------------------------------------------------------------------------------------------------------------------------------------------ | :----------- |
-| initialState                        | Todo データ本体を格納（オブジェクト）<br>reducer 関数の初期値 | App.jsx      |                  | Key はデータ構成参照                                                                                                                        |
-| todoState<br>todoDispatch           | Todo データ本体                                               | App.jsx      | TodoStateContext | dispatch：<br>• addTodo 新規追加<br>• editedTodo 詳細・編集確定<br>• doneTodo 完了<br>• restoreTodo 完了を進行中に戻す<br>• deleteTodo 削除 |
-| initialValue                        | 新規入力の初期値（オブジェクト）                              | App.jsx      |                  | key：<br>• deadline 完了期日（３日後）<br>• importance 重要度（３）<br>• progress 進捗（未着手）                                            |
-| todoText<br>setTodoText             | Todo テキスト（新規入力）                                     | App.jsx      | TodoTmpContext   |
-| todoDetail<br>setTodoDetail         | 詳細テキスト（新規入力）                                      | App.jsx      | TodoTmpContext   |
-| deadline<br>setDeadline             | 完了期日（新規入力）                                          | App.jsx      | TodoTmpContext   | 初期値は initialValue より                                                                                                                  |
-| importance<br>setImportance         | 重要度（新規入力）                                            | App.jsx      | TodoTmpContext   | 初期値は initialValue より                                                                                                                  |
-| progress<br>setProgress             | 進捗（新規入力）                                              | App.jsx      | TodoTmpContext   | 初期値は initialValue より                                                                                                                  |
-| isModalOpen<br>setIsModalOpen       | モーダルの表示状態を管理                                      | App.jsx      | TodoTmpContext   | 初期値 false                                                                                                                                |
-| editDetailTodo<br>setEditDetailTodo | モーダル編集対象の個別 Todo データ（オブジェクト）            | App.jsx      | TodoTmpContext   | Key はデータ構成参照                                                                                                                        |
-| selectImportanceElements            | 重要度 selectBox の項目                                       | App.jsx      | GlobalContext    | 定数                                                                                                                                        |              |
-| selectProgressElements              | 進捗 selectBox の項目                                         | App.jsx      | GlobalContext    | 定数                                                                                                                                        |              |
+| 名前                                        | 内容                                                           | 設定ファイル  | context          | 備考                                                                                                                                                                                                                                                                                                                           |
+| :------------------------------------------ | :------------------------------------------------------------- | :------------ | :--------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| todoSavedInitialState                       | Todo データ本体を格納（LocalStorage）<br>reducer 関数の初期値  | App.jsx       |                  | Key :<br>• id<br>• todoData<br>• todoDetail<br>• deadline<br>• importanceIndex<br>• progressIndex<br>• createdDate<br>• updateDate<br>• completeDate                                                                                                                                                                           |
+| todoSavedState<br>todoSavedDispatch         | Todo データ本体（更新があれば LocalStorage に反映）            | App.jsx       | TodoSavedContext | action.type：<br>• addUpadate 新規追加および更新<br>• doneTodo 完了<br>• restoreTodo 完了を進行中に戻す<br>• deleteTodo 削除<br>• getDefault デフォルトデータの取込<br>• clear 全データ削除<br>• localClear ロカールストレージのクリア                                                                                         |
+| todoTmpInitialState                         | 新規入力の初期値（オブジェクト）                               | App.jsx       |                  | key：<br>• tmpId<br>• tmpTodoText<br>• tmpDetail<br>• tmpDeadline（初期値:３日後）<br>• tmpImportanceIndex 重要度（初期値:3、3（中））<br>• tmpProgressIndex 進捗（初期値:1、未着手）<br>• tmpCreateDate（初期値:当日）<br>• tmpUpdateDate（初期値:当日）<br>• tmpCompleteDate（初期値:null）<br>• isModalOpen（初期値:false） |
+| todoTmpState<br>todoTmpDispatch             | 新規追加および更新対象の個別 Todo データ（オブジェクト）       | App.jsx       | TodoTmpContext   | action.type：<br>• new モーダルオープン（新規追加）<br>• edit モーダルオープン（編集）<br>• handleChange 各項目の onChange 時の関数<br>• cancel モーダルを閉じると共に編集の場合は初期値をセット<br>• reset 確定した（保存）後の初期値セット                                                                                   |
+| selectImportanceElements                    | 重要度 selectBox の項目                                        | App.jsx       | GlobalContext    | 定数                                                                                                                                                                                                                                                                                                                           |
+| selectProgressElements                      | 進捗 selectBox の項目                                          | App.jsx       | GlobalContext    | 定数                                                                                                                                                                                                                                                                                                                           |
+| sortValue<br>setSortValue                   | 表示順の状態管理                                               | TodoLists.jsx |                  |                                                                                                                                                                                                                                                                                                                                |
+| filterValue<br>setFilterValue               | 完了・未完了の表示状態管理                                     | TodoLists.jsx |                  |                                                                                                                                                                                                                                                                                                                                |
+| todoListForDisplay<br>setTodoListForDisplay | 順序・表示切替・検索を反映した Todo リストを管理               | TodoLists.jsx |                  |                                                                                                                                                                                                                                                                                                                                |
+| searchValue<br>setSearchValue               | 検索の値を管理                                                 | TodoLists.jsx |                  |                                                                                                                                                                                                                                                                                                                                |
+| checked<br>setChecked                       | 表示条エリアの表示・非表示を切り替えるスイッチボタンの状態管理 | TodoLists.jsx |                  | switchChecked が怒られたため変更                                                                                                                                                                                                                                                                                               |
+| sortRadioElements                           | ソート用 radio ボタンの項目                                    | TodoLists.jsx |                  | 定数                                                                                                                                                                                                                                                                                                                           |
+| doneRadioElements                           | 完了・未完了表示切換え用 radio ボタンの項目                    | TodoLists.jsx |                  | 定数                                                                                                                                                                                                                                                                                                                           |
 
 ## 備考
 
@@ -109,7 +111,7 @@ index.js
 
 ## 今後の検証・反省
 
-- 今回は設定に慣れていないため行ったが、既にコンポーネント化されている material-ui の各部品を汎用コンポーネントとして切り分ける必要はほとんどない？共通のデザイン等はスタイルで管理。
+- 既にコンポーネント化されている material-ui の各部品をコンポーネントとして切り分ける必要はほとんどない？共通のデザイン等はスタイルで管理。
 - React ではデータ構成だけでなく、どのように管理（useState、useReducer）し、どうやって渡すか（useContext、props）しっかりと最初に考慮しておくべき
 - 検索を入れるときは、ソートや抽出との兼ね合いをどうするか先に決めておくべき
 

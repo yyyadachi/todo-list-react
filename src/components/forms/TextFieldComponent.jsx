@@ -6,6 +6,7 @@ import TextField from "@material-ui/core/TextField";
 const TextFieldComponent = (props) => {
   // ////////////////////////////////////////////////////
   // RETURN /////////////////////////////////////////////
+  console.log("レンダー（TextFieldComponent.jsx）");
   return (
     <>
       <TextField
@@ -27,4 +28,4 @@ const TextFieldComponent = (props) => {
   );
 };
 
-export default TextFieldComponent;
+export default React.memo(TextFieldComponent);

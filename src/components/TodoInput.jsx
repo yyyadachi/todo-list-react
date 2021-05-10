@@ -10,9 +10,7 @@ import {
 } from "./entryIndex";
 
 // material-ui関連のインポート
-import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-// buttonコンポーネントに渡すアイコンをインポート
+import { makeStyles, Grid } from "@material-ui/core";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import DescriptionIcon from "@material-ui/icons/Description";
 // date-fnsをインポート
@@ -39,6 +37,7 @@ const TodoInput = () => {
 
   // ////////////////////////////////////////////////////
   // RETURN /////////////////////////////////////////////
+  console.log("レンダー（TodoInput.jsx）");
   return (
     <div style={{ marginTop: "10px" }}>
       <Grid container className={classes.grid}>
@@ -49,15 +48,6 @@ const TodoInput = () => {
             label={"Todoを入力"}
             multiline={true}
             variant={"outlined"}
-            // Enterで追加を行う
-            handleEnterPress={(e) => {
-              if (e.key === "Enter") {
-                todoSavedDispatch({
-                  type: "addTodo",
-                  payload: todoTmpState,
-                });
-              }
-            }}
             //
             value={todoTmpState.tmpTodoText}
             setValue={(e) => {
@@ -65,7 +55,6 @@ const TodoInput = () => {
                 type: "handleChange",
                 payload: { key: "tmpTodoText", value: e.target.value },
               });
-              // console.log(JSON.stringify(todoTmpState));
             }}
           />
         </Grid>
@@ -97,7 +86,6 @@ const TodoInput = () => {
                 type: "handleChange",
                 payload: { key: "tmpImportanceIndex", value: e.target.value },
               });
-              // console.log(JSON.stringify(todoTmpState));
             }}
           />
         </Grid>
@@ -128,7 +116,6 @@ const TodoInput = () => {
                 handleClick={() => {
                   todoTmpDispatch({
                     type: "new",
-                    // payload: todoTmpState,
                   });
                 }}
               />
@@ -136,7 +123,6 @@ const TodoInput = () => {
           </Grid>
         </Grid>
       </Grid>
-      {console.log("render TodoInput.jsx")}
     </div>
   );
 };

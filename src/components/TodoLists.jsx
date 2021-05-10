@@ -10,12 +10,7 @@ import {
 import { TodoSavedContext } from "../App";
 
 // material-ui関連のインポート
-import Grid from "@material-ui/core/Grid";
-// import { makeStyles } from "@material-ui/core/styles";
-import Switch from "@material-ui/core/Switch";
-// import Paper from "@material-ui/core/Paper";
-import Collapse from "@material-ui/core/Collapse";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import { Grid, Switch, Collapse, FormControlLabel } from "@material-ui/core";
 import SearchIcon from "@material-ui/icons/Search";
 
 // ////////////////////////////////////////////////////
@@ -29,14 +24,15 @@ const TodoLists = () => {
   const [filterValue, setFilterValue] = useState("incomplete");
   // 画面表示用のtodoリストを作成・state管理 変更毎に再描画するため
   const [todoListForDisplay, setTodoListForDisplay] = useState(todoSavedState);
-  // トランジションの切り替えに利用
-  const [checked, setChecked] = useState(false);
   // 検索の値を格納
   const [searchValue, setSearchValue] = useState("");
+  // スイッチボタンの切り替えに利用
+  const [checked, setChecked] = useState(false);
 
   const handleChange = () => {
     setChecked((prev) => !prev);
   };
+
   // ////////////////////////////////////////////////////
   // radioボタン項目（ソート）
   const sortRadioElements = [
@@ -62,23 +58,24 @@ const TodoLists = () => {
   ];
 
   // ////////////////////////////////////////////////////
-  // 初回およびstate(filterValue、sortValue、todoState（Todoデータ本体）)が変更された場合にstate(todoListForDisplay)を更新する。
+  // 初回および、state(filterValue、sortValue、todoState（Todoデータ本体）)が変更された場合にstate(todoListForDisplay)を更新する。
 
   useEffect(() => {
-    // 更新日順を選択している状態で完了表示とした場合、および完了日順を選択している状態で未完了表示とした場合ソートを登録順(id)とする。
+    // "更新日順"を選択している状態で完了表示とした場合、および"完了日順"を選択している状態で未完了表示とした場合ソートを登録順(id)とする。
     if (filterValue === "complete" && sortValue === "updateDate")
       setSortValue("id");
     if (filterValue === "incomplete" && sortValue === "completeDate")
       setSortValue("id");
 
-    // filterValueおよびsortValueが共にnullの時（検索実行時）は何もしない。
+    // filterValueおよびsortValueが共にnullの時（検索実行時に選択がクリアされている）は何もしない。
     if (filterValue === null && sortValue === null) {
       return;
     } else if (todoSavedState === null) {
+      // データがnullの場合（ローカルストレージクリア時）は空の配列を返す
       setTodoListForDisplay([]);
       return;
     } else {
-      // filterValue、sortValueどちらかがnullの時（検索の直後）はnullの方に値をいれて実行。
+      // 検索実行（filterValue、sortValue共にnull）後にどちらかを選択した場合nullの方に値をいれる。検索値をクリア。
       filterValue === null && setFilterValue("incomplete");
       sortValue === null && setSortValue("id");
       // 検索値クリア
@@ -102,26 +99,12 @@ const TodoLists = () => {
 
       setTodoListForDisplay(newDisplay);
     }
-    console.log("TodoLists.jsx useEffect（todoListForDisplay作成）");
   }, [sortValue, filterValue, todoSavedState]);
   // ↑第二引数を指定しないとuseEffectが無限ループになっている。
 
-  // 確認用console.log
-  useEffect(() => {
-    // console.log(
-    //   "保存リストが変わったよ" + JSON.stringify(todoSavedState, null, 2)
-    // );
-    console.log("保存リストが変わったよ!");
-  }, [todoSavedState]);
-
-  useEffect(() => {
-    // console.log(
-    //   "表示用リストが変わったよ" + JSON.stringify(todoListForDisplay, null, 2)
-    // );
-    console.log("表示用リストが変わったよ");
-  }, [todoListForDisplay]);
-
+  // 検索実行
   const doSearch = () => {
+    // todoTextもしくはtodoDetailに検索値が含まれているデータを抽出
     const searchDisplay = todoSavedState.filter((todo) => {
       return (
         todo.todoText.includes(searchValue) ||
@@ -133,8 +116,18 @@ const TodoLists = () => {
     setTodoListForDisplay(searchDisplay);
   };
 
+  // 確認用console.log
+  // useEffect(() => {
+  //   console.log("保存リスト（todoSavedState）変更");
+  // }, [todoSavedState]);
+
+  // useEffect(() => {
+  //   console.log("表示用リスト（todoListForDisplay）変更");
+  // }, [todoListForDisplay]);
+
   // ////////////////////////////////////////////////////
   // RETURN
+  console.log("レンダー（TodoLists.jsx）");
   return (
     <>
       <Grid container spacing={2} style={{ marginBottom: "4px" }}>
@@ -167,7 +160,6 @@ const TodoLists = () => {
                 radioValue={sortValue}
                 setRadioValue={setSortValue}
               />
-              {/* {console.log("render:TodoLists.jsx RadioComponent(ソート)")} */}
             </Grid>
             <Grid item>
               <RadioComponent
@@ -177,7 +169,6 @@ const TodoLists = () => {
                 radioValue={filterValue}
                 setRadioValue={setFilterValue}
               />
-              {/* {console.log("render:TodoLists.jsx RadioComponent(表示切替)")} */}
             </Grid>
             <Grid item xs={12}>
               <Grid container spacing={1} alignItems="center">
@@ -191,7 +182,7 @@ const TodoLists = () => {
                     setValue={(e) => setSearchValue(e.target.value)}
                   />
                 </Grid>
-                <Grid item xs>
+                <Grid item xs={false}>
                   <ButtonComponent
                     color="default"
                     icon={<SearchIcon />}
@@ -207,12 +198,10 @@ const TodoLists = () => {
         </Collapse>
       </Grid>
       <TodoList
-        filterValue={filterValue} // 表示区分によってボタンの表示を切り替える
         todoListForDisplay={todoListForDisplay} // 画面表示用Todoリスト
       />
-      {console.log("render:TodoLists.jsx")}
     </>
   );
 };
 
-export default TodoLists;
+export default React.memo(TodoLists);

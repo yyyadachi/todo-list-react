@@ -6,28 +6,23 @@ import { TodoTmpContext, TodoSavedContext, GlobalContext } from "../App";
 import { lookUp } from "./definedFunction";
 
 // material-ui関連のインポート
-import { makeStyles } from "@material-ui/core/styles";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import Grid from "@material-ui/core/Grid";
+import {
+  Grid,
+  makeStyles,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Menu,
+  MenuItem,
+  Hidden,
+  Divider,
+} from "@material-ui/core";
 import WorkIcon from "@material-ui/icons/Work";
 import PlaylistAddCheckIcon from "@material-ui/icons/PlaylistAddCheck";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
 import RestoreIcon from "@material-ui/icons/Restore";
-// import Button from "@material-ui/core/Button";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import Divider from "@material-ui/core/Divider";
-import Box from "@material-ui/core/Box";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Button from "@material-ui/core/Button";
 
 import { format } from "date-fns";
 
@@ -57,12 +52,13 @@ const TodoList = (props) => {
     setAnchorEl(null);
   };
 
-  //明日（完了期日が明日以前のTODOを判定するため取得。アイコンの色を赤に）
+  //翌日（完了期日が明日以前のTODOを判定するため取得。アイコンの色を赤に）
   const today = new Date();
   const tomorrow = format(today.setDate(today.getDate() + 1), "yyyy-MM-dd");
 
   // ////////////////////////////////////////////////////
   // RETURN /////////////////////////////////////////////
+  console.log("レンダー（TodoList.jsx）個別Todoデータの展開");
   return (
     <div className={classes.demo}>
       <List dense={true}>
@@ -71,7 +67,7 @@ const TodoList = (props) => {
           return (
             <ListItem key={index.toString()}>
               <Grid container>
-                <Grid item xs={0}>
+                <Grid item xs={"auto"}>
                   <Grid container>
                     <Grid item>
                       <ListItemIcon>
@@ -87,8 +83,9 @@ const TodoList = (props) => {
                     </Grid>
                     <Grid item xs>
                       <ListItemText
-                        style={{ whiteSpace: "pre-line" }} // 改行を有効にする
                         primary={todo.todoText}
+                        style={{ whiteSpace: "pre-line" }} // 改行を有効にする
+                        //
                         secondary={[
                           todo.todoDetail !== "" ? `${todo.todoDetail}\n` : "",
                           `(`,
@@ -107,10 +104,10 @@ const TodoList = (props) => {
                           )}`,
                           `ID：${todo.id}`,
                           `\n`,
-                          props.filterValue === "complete"
+                          todo.progressIndex === 4 // 進捗が4(完了)の場合のみ表示
                             ? `完了日：${todo.completeDate}`
                             : "",
-                          props.filterValue !== "complete"
+                          todo.progressIndex !== 4
                             ? `更新日：${todo.updateDate}`
                             : "",
                           `作成日：${todo.createdDate}`,
@@ -120,7 +117,7 @@ const TodoList = (props) => {
                     </Grid>
                   </Grid>
                 </Grid>
-                <Grid item xs={12} md>
+                <Grid item xs={12} md style={{ minWidth: "270px" }}>
                   <Grid container justify="flex-end">
                     <Grid item>
                       <ButtonComponent
@@ -184,7 +181,6 @@ const TodoList = (props) => {
                               type: "deleteTodo",
                               payload: delateId,
                             });
-                            // console.log(JSON.stringify(todo, null, 2));
                             handleClose();
                           }}
                         >
@@ -209,17 +205,16 @@ const TodoList = (props) => {
                         }}
                       />
                     </Grid>
-                  </Grid>{" "}
-                  {/* Grid container */}
+                  </Grid>
                 </Grid>
                 {/* 最後のtodoの下には区切り線を表示しない */}
                 {index < props.todoListForDisplay.length - 1 && (
-                  <Grid item xs={12}>
-                    {/* 画面幅sm(600px)以上の場合は区切り線を表示 */}
-                    <Box display={{ xs: "none", sm: "block" }}>
+                  // {/* 画面幅sm(600px)以上の場合は区切り線を表示。としたかったが実際は960px以上で表示となっている */}
+                  <Hidden smDown>
+                    <Grid item xs={12}>
                       <Divider variant="middle" />
-                    </Box>
-                  </Grid>
+                    </Grid>
+                  </Hidden>
                 )}
               </Grid>
             </ListItem>
@@ -227,9 +222,8 @@ const TodoList = (props) => {
         })}
         {/* **** ここまでmap **** */}
       </List>
-      {console.log("render: TodoList.jsx（詳細データ）")}
     </div>
   );
 };
 
-export default TodoList;
+export default React.memo(TodoList);
