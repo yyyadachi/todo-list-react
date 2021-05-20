@@ -8,3 +8,4 @@ export { default as SelectComponent } from "./forms/SelectComponent";
 export { default as RadioComponent } from "./forms/RadioComponent";
 export { default as TodoList } from "./TodoList";
 export { default as TodoModal } from "./TodoModal";
+export { default as DefaultTodoData } from "../DefaultTodoData";

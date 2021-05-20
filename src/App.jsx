@@ -5,9 +5,10 @@ import {
   TodoInput,
   TodoLists,
   TodoModal,
+  DefaultTodoData,
 } from "./components/entryIndex";
-// デフォルトtodoデータ（JSON）のインポート
-import DefaultTodoData from "./DefaultTodoData.json";
+// デフォルトtodoデータ（JSON）のインポート ↑のDefaultTodoData.jsに移行
+// import DefaultTodoData from "./DefaultTodoData.json";
 //
 // material-ui関連のインポート
 import {
@@ -35,6 +36,7 @@ const useStyles = makeStyles({
 // ////////////////////////////////////////////////////
 // Context作成
 export const TodoSavedContext = createContext(); // Todoデータ本体(複数のtodo)
+
 export const TodoTmpContext = createContext(); // 新規入力および編集する確定前todoデータ(個別todo)
 export const GlobalContext = createContext(); // 定数
 
@@ -139,8 +141,22 @@ const todoSavedReducer = (todoSavedState, todoSavedAction) => {
 
     // ////////////////////////////////
     case "getDefault": // デフォルトデータの取り込み
-      newTodoSavedState = [];
+      // newTodoSavedState = [];
       newTodoSavedState = [...DefaultTodoData];
+
+      // newTodoSavedState = [
+      //   {
+      //     id: 2,
+      //     todoText: "完了期日が一番新しいデータ",
+      //     todoDetail: "",
+      //     deadline: "2022-12-01",
+      //     importanceIndex: 4,
+      //     progressIndex: 4,
+      //     createdDate: "2021-04-23",
+      //     updateDate: "2021-06-25",
+      //     completeDate: "",
+      //   },
+      // ];
       return newTodoSavedState;
 
     // ////////////////////////////////
@@ -256,6 +272,12 @@ const App = () => {
     todoSavedReducer,
     todoSavedInitialState
   );
+
+  // const handleSavedDispatch = useCallback(
+  //   (action) => todoSavedDispatch(action),
+  //   []
+  // );
+
   const [todoTmpState, todoTmpDispatch] = useReducer(
     todoTmpReducer,
     todoTmpInitialState
@@ -265,6 +287,8 @@ const App = () => {
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("darkMode") === "on" ? true : false
   );
+
+  // const handleDarkMode = useCallback((v) => setDarkMode(v), []);
 
   // 変数darkModeを利用するため、関数内に移動
   const theme = createMuiTheme({
@@ -318,6 +342,11 @@ const App = () => {
             todoSavedDispatch,
           }}
         >
+          {/* <TodoSavedContextNew.Provider
+            value={{
+              handleSavedDispatch,
+            }}
+          > */}
           <TodoTmpContext.Provider
             value={{
               todoTmpState,
@@ -341,6 +370,7 @@ const App = () => {
               </Container>
             </GlobalContext.Provider>
           </TodoTmpContext.Provider>
+          {/* </TodoSavedContextNew.Provider> */}
         </TodoSavedContext.Provider>
       </ThemeProvider>
     </>

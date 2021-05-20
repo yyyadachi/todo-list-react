@@ -98,11 +98,11 @@ const TodoInput = () => {
                 title="ToDo追加"
                 //
                 handleClick={async () => {
-                  todoSavedDispatch({
+                  await todoSavedDispatch({
                     type: "addUpdate",
                     payload: todoTmpState,
                   });
-                  await todoTmpDispatch({
+                  todoTmpDispatch({
                     type: "reset",
                   });
                 }}
