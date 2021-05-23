@@ -9,7 +9,8 @@ import {
 } from "./components/entryIndex";
 // デフォルトtodoデータ（JSON）のインポート ↑のDefaultTodoData.jsに移行
 // import DefaultTodoData from "./DefaultTodoData.json";
-//
+import Header1 from "./components/Header1"; // レンダーのテスト用
+
 // material-ui関連のインポート
 import {
   Container,
@@ -43,7 +44,7 @@ export const GlobalContext = createContext(); // 定数
 // ////////////////////////////////////////////////////
 // todoSavedState,todoSavedDispatch（reducer）の設定 TodoSavedContextで渡す
 
-const todoSavedInitialState = JSON.parse(localStorage.getItem("TodoData")); // データが無い場合nullが返ってくる。
+const todoSavedInitialState = JSON.parse(localStorage.getItem("TodoData")); // データが無い場合nullが返ってくる。＊ ~~ || [] とするとLocalStorageクリア直後に空配列を生成してしまうため。
 
 const todoSavedReducer = (todoSavedState, todoSavedAction) => {
   console.log("関数実行（todoSavedReducer App.jsx）");
@@ -61,7 +62,6 @@ const todoSavedReducer = (todoSavedState, todoSavedAction) => {
           newId = 1;
           todoSavedState = [];
           // 初回およびLocalStorageクリア後は、Todo新規追加時に空配列を作成する。
-          // （todoSavedInitialStateに空配列を設定するとLocalStorageクリアが維持されない）
         }
 
         newTodoSavedState = [
@@ -144,19 +144,32 @@ const todoSavedReducer = (todoSavedState, todoSavedAction) => {
       // newTodoSavedState = [];
       newTodoSavedState = [...DefaultTodoData];
 
+      // テスト用の直接代入データ（想定通りに動作する）
       // newTodoSavedState = [
       //   {
-      //     id: 2,
-      //     todoText: "完了期日が一番新しいデータ",
+      //     id: 14,
+      //     todoText: "詳細がないデータ（default:完了)",
       //     todoDetail: "",
-      //     deadline: "2022-12-01",
-      //     importanceIndex: 4,
+      //     deadline: "2021-05-12",
+      //     importanceIndex: 3,
       //     progressIndex: 4,
+      //     createdDate: "2021-04-10",
+      //     updateDate: "2021-04-10",
+      //     completeDate: "2021-05-12",
+      //   },
+      //   {
+      //     id: 20,
+      //     todoText: "デフォルトで一番ＩＤが大きいデータ",
+      //     todoDetail: "IDは20",
+      //     deadline: "2021-09-01",
+      //     importanceIndex: 1,
+      //     progressIndex: 1,
       //     createdDate: "2021-04-23",
       //     updateDate: "2021-06-25",
       //     completeDate: "",
       //   },
       // ];
+
       return newTodoSavedState;
 
     // ////////////////////////////////
@@ -361,6 +374,7 @@ const App = () => {
             >
               {/* <TodoSavedDispatchContext value={todoSavedDispatch}> */}
               <Header darkMode={darkMode} setDarkMode={setDarkMode} />
+              <Header1 />
               {/* </TodoSavedDispatchContext> */}
               <Container maxWidth="xl">
                 <TodoInput />

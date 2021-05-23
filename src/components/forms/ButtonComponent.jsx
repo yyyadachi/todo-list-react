@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 // material-ui関連のインポート
 import { makeStyles, Button } from "@material-ui/core";
@@ -17,7 +17,7 @@ const ButtonComponent = (props) => {
 
   // ////////////////////////////////////////////////////
   // RETURN /////////////////////////////////////////////
-  console.log("レンダー（ButtonComponent.jsx");
+  console.log("レンダー（ButtonComponent.jsx）");
   return (
     <div>
       {/* 指定しないpropsはdefault値となる。iconは非表示となる。 */}
@@ -37,4 +37,4 @@ const ButtonComponent = (props) => {
   );
 };
 
-export default ButtonComponent;
+export default memo(ButtonComponent);
