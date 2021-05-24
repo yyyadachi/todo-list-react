@@ -35,6 +35,7 @@ const DatePickerComponent = (props) => {
           variant="inline"
           //
           value={props.selectedDate}
+          // onChange={props.setSelectedDate}
           onChange={(date) =>
             props.setSelectedDate({
               type: "handleChange",
