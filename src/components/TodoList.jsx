@@ -126,13 +126,14 @@ const TodoList = (props) => {
                         icon={<PlaylistAddCheckIcon />}
                         size="small"
                         title="完了"
-                        //
                         handleClick={() => {
                           todoSavedDispatch({
                             type: "doneTodo",
-                            payload: todo.id,
+                            // payload: todo.id,
                           });
                         }}
+                        id={todo.id}
+                        // handleClick={handleDoneClick}
                       />
                     </Grid>
 

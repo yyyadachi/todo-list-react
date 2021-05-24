@@ -19,7 +19,7 @@ import {
 import CancelPresentationIcon from "@material-ui/icons/CancelPresentation";
 import CheckCircleOutlineIcon from "@material-ui/icons/CheckCircleOutline";
 
-import { format } from "date-fns";
+// import { format } from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -97,15 +97,16 @@ const TodoModal = (props) => {
               label={"完了期日"}
               //
               selectedDate={todoTmpState.tmpDeadline}
-              setSelectedDate={(date) => {
-                todoTmpDispatch({
-                  type: "handleChange",
-                  payload: {
-                    key: "tmpDeadline",
-                    value: format(date, "yyyy-MM-dd"),
-                  },
-                });
-              }}
+              // setSelectedDate={(date) => {
+              //   todoTmpDispatch({
+              //     type: "handleChange",
+              //     payload: {
+              //       key: "tmpDeadline",
+              //       value: format(date, "yyyy-MM-dd"),
+              //     },
+              //   });
+              // }}
+              setSelectedDate={todoTmpDispatch}
             />
           </Grid>
           <Grid item xs={6}>
@@ -115,15 +116,17 @@ const TodoModal = (props) => {
               label={"重要度"}
               //
               selectValue={todoTmpState.tmpImportanceIndex}
-              setSelectValue={(e) => {
-                todoTmpDispatch({
-                  type: "handleChange",
-                  payload: {
-                    key: "tmpImportanceIndex",
-                    value: e.target.value,
-                  },
-                });
-              }}
+              // setSelectValue={(e) => {
+              //   todoTmpDispatch({
+              //     type: "handleChange",
+              //     payload: {
+              //       key: "tmpImportanceIndex",
+              //       value: e.target.value,
+              //     },
+              //   });
+              // }}
+              setSelectValue={todoTmpDispatch}
+              selectKey={"tmpImportanceIndex"}
             />
           </Grid>
           <Grid item xs={6}>
@@ -136,15 +139,17 @@ const TodoModal = (props) => {
               label={"進捗"}
               //
               selectValue={todoTmpState.tmpProgressIndex}
-              setSelectValue={(e) => {
-                todoTmpDispatch({
-                  type: "handleChange",
-                  payload: {
-                    key: "tmpProgressIndex",
-                    value: e.target.value,
-                  },
-                });
-              }}
+              // setSelectValue={(e) => {
+              //   todoTmpDispatch({
+              //     type: "handleChange",
+              //     payload: {
+              //       key: "tmpProgressIndex",
+              //       value: e.target.value,
+              //     },
+              //   });
+              // }}
+              setSelectValue={todoTmpDispatch}
+              selectKey={"tmpProgressIndex"}
             />
           </Grid>
           <Grid item xs={6}>

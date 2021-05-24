@@ -1,4 +1,4 @@
-import React, { useContext, useCallback } from "react";
+import React, { useContext } from "react";
 // contextをインポート
 import { TodoSavedContext, TodoTmpContext, GlobalContext } from "../App";
 // コンポーネントをインポート
@@ -14,7 +14,7 @@ import { makeStyles, Grid } from "@material-ui/core";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import DescriptionIcon from "@material-ui/icons/Description";
 // date-fnsをインポート
-import { format } from "date-fns";
+// import { format } from "date-fns";
 
 // ////////////////////////////////////////////////////
 // material-uiの設定
@@ -63,15 +63,16 @@ const TodoInput = () => {
             label={"完了期日"}
             //
             selectedDate={todoTmpState.tmpDeadline}
-            setSelectedDate={(date) => {
-              todoTmpDispatch({
-                type: "handleChange",
-                payload: {
-                  key: "tmpDeadline",
-                  value: format(date, "yyyy-MM-dd"),
-                },
-              });
-            }}
+            // setSelectedDate={(date) => {
+            //   todoTmpDispatch({
+            //     type: "handleChange",
+            //     payload: {
+            //       key: "tmpDeadline",
+            //       value: format(date, "yyyy-MM-dd"),
+            //     },
+            //   });
+            // }}
+            setSelectedDate={todoTmpDispatch}
           />
         </Grid>
         <Grid item xs={6} sm>
@@ -81,12 +82,14 @@ const TodoInput = () => {
             label={"重要度"}
             //
             selectValue={todoTmpState.tmpImportanceIndex}
-            setSelectValue={(e) => {
-              todoTmpDispatch({
-                type: "handleChange",
-                payload: { key: "tmpImportanceIndex", value: e.target.value },
-              });
-            }}
+            // setSelectValue={(e) => {
+            //   todoTmpDispatch({
+            //     type: "handleChange",
+            //     payload: { key: "tmpImportanceIndex", value: e.target.value },
+            //   });
+            // }}
+            setSelectValue={todoTmpDispatch}
+            selectKey={"tmpImportanceIndex"}
           />
         </Grid>
         <Grid item xs={12} sm={6}>

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 // material-ui関連のインポート
 import {
@@ -37,7 +37,12 @@ const SelectComponent = (props) => {
         id="select-helper"
         //
         value={props.selectValue}
-        onChange={props.setSelectValue}
+        onChange={(e) =>
+          props.setSelectValue({
+            type: "handleChange",
+            payload: { key: props.selectKey, value: e.target.value },
+          })
+        }
       >
         {/* **** ここからmap **** */}
         {props.elements.map((element, index) => {
@@ -54,4 +59,4 @@ const SelectComponent = (props) => {
   );
 };
 
-export default SelectComponent;
+export default memo(SelectComponent);

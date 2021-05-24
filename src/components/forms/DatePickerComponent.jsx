@@ -1,4 +1,4 @@
-import React from "react";
+import React, { memo } from "react";
 
 // material-ui、日付ピッカー関連のインポート
 import "date-fns";
@@ -8,12 +8,15 @@ import {
   KeyboardDatePicker,
 } from "@material-ui/pickers";
 
+// date-fnsをインポート
+import { format } from "date-fns";
+
 // ////////////////////////////////////////////////////
 // FUNCTION ///////////////////////////////////////////
 const DatePickerComponent = (props) => {
   // ////////////////////////////////////////////////////
   // RETURN /////////////////////////////////////////////
-  console.log("レンダー（DatePickerComponent.jsx）");
+  console.log("レンダー（DatePickerComponent.jsx） 制御完了");
   return (
     <MuiPickersUtilsProvider utils={DateFnsUtils}>
       {/** <></>は Warning: Failed prop type: Invalid prop `children` supplied to `MuiPickersUtilsProvider`. の回避 */}
@@ -32,11 +35,19 @@ const DatePickerComponent = (props) => {
           variant="inline"
           //
           value={props.selectedDate}
-          onChange={props.setSelectedDate}
+          onChange={(date) =>
+            props.setSelectedDate({
+              type: "handleChange",
+              payload: {
+                key: "tmpDeadline",
+                value: format(date, "yyyy-MM-dd"),
+              },
+            })
+          }
         />
       </>
     </MuiPickersUtilsProvider>
   );
 };
 
-export default DatePickerComponent;
+export default memo(DatePickerComponent);
